@@ -1,5 +1,15 @@
 <?php
 @include 'includes/config.php';
+session_start();
+?>
+
+<?php include 'header.php'; ?>
+
+<section class="home">
+    <h1>Welcome to PTL Tinapa Store</h1>
+</section>
+
+<?php include 'footer.php'; ?>
 
 // Fetch homepage content
 $select_home = mysqli_query($conn, "SELECT * FROM site_content WHERE section='home'");
