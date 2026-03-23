@@ -1,50 +1,45 @@
 <?php
-
 @include '../includes/config.php';
-
 session_start();
 
+$message = [];
+
 if(isset($_POST['submit'])){
+    $email = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['pass']);
 
-   // Sanitize input
-   $filter_email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-   $email = mysqli_real_escape_string($conn, $filter_email);
-   $filter_pass = filter_var($_POST['pass'], FILTER_SANITIZE_SPECIAL_CHARS);
-   $pass = mysqli_real_escape_string($conn, $filter_pass);
-
-   // Fetch the user record
-   $select_users = mysqli_query($conn, "SELECT * FROM `users` WHERE email = '$email'") or die('query failed');
-
-   if(mysqli_num_rows($select_users) > 0){
-      $row = mysqli_fetch_assoc($select_users);
-
-      // Verify the password
-      if(password_verify($pass, $row['password'])){
-         
-         if($row['user_type'] == 'admin'){
-            $_SESSION['admin_name'] = $row['name'];
-            $_SESSION['admin_email'] = $row['email'];
-            $_SESSION['admin_id'] = $row['id'];
-            header('location:admin_page.php');
-         } elseif($row['user_type'] == 'user'){
-            $_SESSION['user_name'] = $row['name'];
-            $_SESSION['user_email'] = $row['email'];
-            $_SESSION['user_id'] = $row['id'];
-            header('location:index.php');
-         } else {
-            $message[] = 'No user found!';
-         }
-
-      } else {
-         $message[] = 'Incorrect email or password!';
-      }
-
-   } else {
-      $message[] = 'Incorrect email or password!';
-   }
-
+    if(empty($email) || empty($password)){
+        $message[] = 'Please enter email and password';
+    } else {
+        // Use prepared statement to prevent SQL injection
+        $stmt = $conn->prepare("SELECT * FROM admin WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $select = $stmt->get_result();
+        
+        if($select->num_rows > 0){
+            $row = $select->fetch_assoc();
+            
+            // Check if user has admin role
+            $is_admin = ($row['role'] === 'admin');
+            
+            if($is_admin && $row['password'] === $password){
+                $_SESSION['admin_id'] = $row['id'];
+                $_SESSION['admin_name'] = $row['name'];
+                $_SESSION['admin_email'] = $row['email'];
+                $_SESSION['user_type'] = 'admin';
+                header('location: dashboard.php');
+                exit();
+            } else if(!$is_admin){
+                $message[] = 'Access denied: Only admins can login here';
+            } else {
+                $message[] = 'Incorrect password';
+            }
+        } else {
+            $message[] = 'Email not found';
+        }
+    }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -52,40 +47,88 @@ if(isset($_POST['submit'])){
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Login</title>
-   <link rel="icon" href="images/logo2.png" type="image/x-icon"> 
-
+   <title>Admin Login - PTL Best Tinapa</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-   <link rel="stylesheet" href="style_users.css">
-
+   <link rel="stylesheet" href="../assets/css/style.css">
+   <style>
+      body {
+         background: linear-gradient(135deg, #C41E3A 0%, #8B0000 100%);
+         min-height: 100vh;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         padding: 20px;
+      }
+      
+      .login-container {
+         background: white;
+         padding: 50px 40px;
+         border-radius: 12px;
+         box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+         width: 100%;
+         max-width: 400px;
+         text-align: center;
+      }
+      
+      .login-container h2 {
+         color: var(--primary-color);
+         margin-bottom: 10px;
+         font-size: 1.8rem;
+      }
+      
+      .login-container p {
+         color: var(--text-color);
+         margin-bottom: 30px;
+         font-size: 0.9rem;
+      }
+      
+      .login-icon {
+         font-size: 3rem;
+         color: var(--primary-color);
+         margin-bottom: 20px;
+      }
+   </style>
 </head>
 <body>
 
-<?php
-if(isset($message)){
-   foreach($message as $msg){
-      echo '
-      <div class="message">
-         <span>'.$msg.'</span>
-         <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
-      </div>
-      ';
-   }
-}
-?>
+<div class="login-container">
+   <div class="login-icon">
+      <i class="fas fa-lock"></i>
+   </div>
    
-<section class="form-container">
+   <h2>Admin Login</h2>
+   <p>PTL Best Tinapa Management</p>
 
+   <?php
+   if(isset($message)){
+      foreach($message as $msg){
+         echo '<div class="message" style="background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; margin-bottom: 15px; padding: 15px; border-radius: 4px; text-align: left;"><span>'.$msg.'</span></div>';
+      }
+   }
+   ?>
+   
    <form action="" method="post">
-      <h3>Login Now</h3>
-      <input type="email" name="email" class="box" placeholder="Enter your email" required>
-      <input type="password" name="pass" class="box" placeholder="Enter your password" required>
-      <input type="submit" class="btn" name="submit" value="Login Now">
-      <p>Don't have an account? <a href="register.php">Register Now</a></p>
+      <div class="form-group">
+         <input type="email" name="email" class="form-control" placeholder="Admin Email" required style="margin-bottom: 15px;">
+      </div>
+      
+      <div class="form-group">
+         <input type="password" name="pass" class="form-control" placeholder="Password" required>
+      </div>
+      
+      <button type="submit" name="submit" class="btn btn-full" style="margin-top: 20px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+         <i class="fas fa-sign-in-alt"></i> Login to Admin Panel
+      </button>
+      
+      <hr style="margin: 20px 0;">
+      
+      <p style="margin: 0; font-size: 0.9rem;">
+         <a href="../index.php" style="color: var(--primary-color);">
+            <i class="fas fa-arrow-left"></i> Back to Website
+         </a>
+      </p>
    </form>
-
-</section>
+</div>
 
 </body>
 </html>
