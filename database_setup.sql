@@ -113,5 +113,5 @@ INSERT INTO site_content (section, title, content) VALUES
 -- Insert sample services/products
 INSERT INTO services (title, description, image, price) VALUES
 ('Premium Tinapa', 'Our best quality smoked fish', 'tinapa1.jpg', 250.00),
-('Regular Tinapa', 'Standard smoked fish', 'tinapa2.jpg', 150.00),
+('Bangus', 'Standard smoked fish', 'bangus.jpg', 150.00),
 ('Spicy Tinapa', 'Spiced smoked fish', 'tinapa3.jpg', 200.00);

@@ -41,13 +41,17 @@ if(isset($message)){
 
         <nav class="navbar">
             <ul>
-                <li><a href="index.php">Home</a></li>
+                <li><a href="index.php" class="active">Home</a></li>
                 <li><a href="services.php">Products</a></li>
                 <li><a href="payment_methods.php">Payment Methods</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="contact.php">Contact</a></li>
             </ul>
         </nav>
+
+        <div class="actions">
+            <a href="services.php" class="btn-order">ORDER NOW</a>
+        </div>
 
         <div class="icons">
             <div id="menu-btn" class="fas fa-bars"></div>

@@ -11,8 +11,10 @@ $home = mysqli_fetch_assoc($select_home);
 
 <section class="home">
     <div class="container">
+        <small style="color: #555; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600;">Bulacan's Pride</small>
         <h1><?php echo $home['title'] ?? 'Welcome to PTL Best Tinapa'; ?></h1>
-        <p><?php echo $home['content'] ?? 'Premium quality smoked fish products'; ?></p>
+        <p><?php echo $home['content'] ?? 'Welcome to PTL Best Tinapa in Bulacan. We provide the finest smoked fish products, crafted with generational expertise and architectural precision.'; ?></p>
+        <a href="services.php" class="btn">Explore Our Selection</a>
     </div>
 </section>
 

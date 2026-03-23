@@ -123,7 +123,7 @@ $message = $message ?? [];
             <?php
             while($fetch_services = mysqli_fetch_assoc($select_services)){
             ?>
-            <tr style="border-bottom: 1px solid var(--border-color); hover-effect">
+            <tr style="border-bottom: 1px solid var(--border-color);">
                <td style="padding: 12px; border: 1px solid var(--border-color);">
                   <img src="../uploads/<?php echo htmlspecialchars($fetch_services['image']); ?>" width="60" height="60" style="border-radius: 4px; object-fit: cover;">
                </td>
