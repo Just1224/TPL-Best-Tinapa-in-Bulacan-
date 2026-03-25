@@ -24,66 +24,112 @@ if(isset($_POST['send'])){
 
 <?php include 'header.php'; ?>
 
-<section class="section">
-    <div class="container">
-        <div class="section-title">
-            <h2>Contact Us</h2>
+<section class="dashboard-section">
+    <div class="section-container">
+        <div class="section-header">
+            <h1 class="section-title">Contact Us</h1>
+            <p class="section-subtitle">Get in touch with us for inquiries, orders, or any questions about our premium tinapa products.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
-            <div>
-                <h3 style="color: var(--primary-color); margin-bottom: 30px;">Get in Touch</h3>
-                
-                <div style="margin-bottom: 30px;">
-                    <h4><i class="fas fa-phone" style="color: var(--primary-color); margin-right: 10px;"></i> Phone</h4>
-                    <p>+63 (999) 999-9999</p>
+        <div class="dashboard-grid-2">
+            <!-- Contact Information -->
+            <div class="dashboard-card fade-in-up">
+                <div class="card-header" style="background: var(--success-gradient);">
+                    <h2><i class="fas fa-address-book"></i> Get in Touch</h2>
                 </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 2rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: var(--primary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 0.25rem; color: var(--text-primary);">Phone</h4>
+                                <p style="color: var(--text-secondary); margin: 0;">+63 (999) 999-9999</p>
+                                <p style="color: var(--text-light); font-size: 0.9rem; margin: 0;">Mon-Fri: 9AM-5PM</p>
+                            </div>
+                        </div>
 
-                <div style="margin-bottom: 30px;">
-                    <h4><i class="fas fa-envelope" style="color: var(--primary-color); margin-right: 10px;"></i> Email</h4>
-                    <p><a href="mailto:info@ptltinapa.com">info@ptltinapa.com</a></p>
-                </div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: var(--secondary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 0.25rem; color: var(--text-primary);">Email</h4>
+                                <p style="color: var(--text-secondary); margin: 0;">
+                                    <a href="mailto:info@ptltinapa.com" style="color: var(--primary-color); text-decoration: none;">info@ptltinapa.com</a>
+                                </p>
+                                <p style="color: var(--text-light); font-size: 0.9rem; margin: 0;">We'll respond within 24 hours</p>
+                            </div>
+                        </div>
 
-                <div style="margin-bottom: 30px;">
-                    <h4><i class="fas fa-map-marker-alt" style="color: var(--primary-color); margin-right: 10px;"></i> Address</h4>
-                    <p>Malolos, Bulacan<br>Philippines</p>
-                </div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: var(--warning-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 0.25rem; color: var(--text-primary);">Address</h4>
+                                <p style="color: var(--text-secondary); margin: 0;">Malolos, Bulacan<br>Philippines</p>
+                                <p style="color: var(--text-light); font-size: 0.9rem; margin: 0;">Visit our processing facility</p>
+                            </div>
+                        </div>
 
-                <div style="margin-bottom: 30px;">
-                    <h4><i class="fas fa-clock" style="color: var(--primary-color); margin-right: 10px;"></i> Business Hours</h4>
-                    <p>Monday - Friday: 9:00 AM - 5:00 PM<br>
-                       Saturday: 9:00 AM - 3:00 PM<br>
-                       Sunday: Closed</p>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: var(--danger-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 0.25rem; color: var(--text-primary);">Business Hours</h4>
+                                <div style="color: var(--text-secondary);">
+                                    <p style="margin: 0.25rem 0;">Monday - Friday: 9:00 AM - 5:00 PM</p>
+                                    <p style="margin: 0.25rem 0;">Saturday: 9:00 AM - 3:00 PM</p>
+                                    <p style="margin: 0.25rem 0; color: var(--danger-color); font-weight: 600;">Sunday: Closed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div>
-                <form method="POST">
-                    <?php 
-                    if(!empty($message)){
-                        foreach($message as $msg){
-                            echo '<div class="message success"><span>'.$msg.'</span></div>';
+            <!-- Contact Form -->
+            <div class="dashboard-card fade-in-up delay-1">
+                <div class="card-header" style="background: var(--primary-gradient);">
+                    <h2><i class="fas fa-paper-plane"></i> Send us a Message</h2>
+                </div>
+                <div class="card-content">
+                    <form method="POST">
+                        <?php
+                        if(!empty($message)){
+                            foreach($message as $msg){
+                                if(strpos($msg, 'successfully') !== false){
+                                    echo '<div class="alert success"><i class="fas fa-check-circle"></i> ' . $msg . '</div>';
+                                } else {
+                                    echo '<div class="alert error"><i class="fas fa-exclamation-triangle"></i> ' . $msg . '</div>';
+                                }
+                            }
                         }
-                    }
-                    ?>
-                    
-                    <div class="form-group">
-                        <label for="name">Full Name *</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
+                        ?>
 
-                    <div class="form-group">
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="message">Message *</label>
-                        <textarea id="message" name="message" required></textarea>
-                    </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                        </div>
 
-                    <button type="submit" name="send" class="btn btn-full">Send Message</button>
-                </form>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Tell us how we can help you..." required></textarea>
+                        </div>
+
+                        <button type="submit" name="send" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

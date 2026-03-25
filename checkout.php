@@ -95,48 +95,130 @@ if(isset($_POST['place_order'])){
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .checkout-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
+        .checkout-dashboard {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 2rem 1rem;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .dashboard-header p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .checkout-grid {
             display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .checkout-section {
+        .checkout-card {
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.8);
         }
 
-        .checkout-section h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--primary-color);
+        .checkout-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
         }
 
-        .checkout-section h3 {
-            color: var(--dark-color);
-            margin-top: 25px;
-            margin-bottom: 15px;
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .card-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-header h2 i {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .card-content {
+            padding: 2.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: #667eea;
             font-size: 1.1rem;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
             font-weight: 600;
-            color: var(--dark-color);
+            color: #374151;
+            margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
 
@@ -144,136 +226,330 @@ if(isset($_POST['place_order'])){
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
+            padding: 1rem 1.25rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             font-family: inherit;
             font-size: 1rem;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
+            transition: all 0.3s ease;
+            background: #fafafa;
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px rgba(196, 30, 58, 0.3);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+            transform: translateY(-1px);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.6;
+        }
+
+        .form-group input[readonly] {
+            background: #f3f4f6;
+            cursor: not-allowed;
+            border-color: #d1d5db;
+        }
+
+        .payment-methods {
+            display: grid;
+            gap: 1rem;
         }
 
         .payment-option {
             display: flex;
             align-items: center;
-            padding: 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 4px;
-            margin-bottom: 10px;
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .payment-option:hover::before {
+            left: 100%;
         }
 
         .payment-option:hover {
-            border-color: var(--primary-color);
-            background: rgba(196, 30, 58, 0.05);
-        }
-
-        .payment-option input[type="radio"] {
-            margin-right: 15px;
-            width: auto;
-            cursor: pointer;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
         }
 
         .payment-option.selected {
-            border-color: var(--primary-color);
-            background: rgba(196, 30, 58, 0.1);
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .order-summary {
-            background: var(--light-color);
-            padding: 20px;
-            border-radius: 8px;
+        .payment-option input[type="radio"] {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+        }
+
+        .payment-option label {
+            flex: 1;
+            margin: 0;
+            cursor: pointer;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .payment-option label strong {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-option label small {
+            color: #6b7280;
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        .order-summary-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
             position: sticky;
-            top: 20px;
+            top: 2rem;
+            border: 1px solid rgba(255,255,255,0.8);
         }
 
-        .order-summary h2 {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            border: none;
-            padding-bottom: 0;
+        .summary-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .summary-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .summary-content {
+            padding: 2rem;
         }
 
         .summary-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            transition: all 0.2s ease;
+        }
+
+        .summary-item:hover {
+            background: #f9fafb;
+            padding-left: 0.5rem;
+            border-radius: 8px;
+            margin: 0 -0.5rem;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item span:first-child {
+            color: #6b7280;
+            font-size: 0.95rem;
         }
 
         .summary-item span:last-child {
             font-weight: 600;
-            color: var(--primary-color);
+            color: #1f2937;
         }
 
         .summary-divider {
-            border-top: 1px solid var(--border-color);
-            margin: 10px 0;
+            height: 2px;
+            background: linear-gradient(90deg, #e5e7eb 0%, #667eea 50%, #e5e7eb 100%);
+            margin: 1rem 0;
+            border-radius: 1px;
         }
 
         .summary-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-top: 10px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
         }
 
-        .alert {
-            padding: 12px 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
+        .summary-total .summary-item {
+            border: none;
+            padding: 0;
+            margin: 0;
+            background: transparent;
         }
 
-        .alert.error {
-            background: rgba(231, 76, 60, 0.1);
-            color: var(--danger-color);
+        .summary-total .summary-item span:first-child {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1f2937;
         }
 
-        .alert.success {
-            background: rgba(39, 174, 96, 0.1);
-            color: var(--success-color);
+        .summary-total .summary-item span:last-child {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #059669;
         }
 
         .place-order-btn {
             width: 100%;
-            padding: 15px;
-            margin-top: 20px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 1.25rem 2rem;
+            margin-top: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .place-order-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .place-order-btn:hover::before {
+            left: 100%;
         }
 
         .place-order-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(196, 30, 58, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .place-order-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+        }
+
+        .alert.error {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .alert.success {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        .alert i {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .order-summary-card {
+                position: static;
+            }
         }
 
         @media (max-width: 768px) {
-            .checkout-grid {
-                grid-template-columns: 1fr;
+            .checkout-dashboard {
+                padding: 1rem;
             }
 
-            .order-summary {
-                position: static;
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+
+            .card-content {
+                padding: 1.5rem;
+            }
+
+            .checkout-grid {
+                gap: 1.5rem;
+            }
+
+            .place-order-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .card-header {
+                padding: 1.5rem;
+            }
+
+            .card-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .card-content {
+                padding: 1.25rem;
+            }
+
+            .payment-option {
+                padding: 1.25rem;
+            }
+
+            .place-order-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
             }
         }
     </style>
@@ -282,130 +558,171 @@ if(isset($_POST['place_order'])){
 
 <?php @include 'header.php'; ?>
 
-<div class="checkout-container">
-    <div class="checkout-grid">
-        <div>
-            <div class="checkout-section">
-                <h2><i class="fas fa-credit-card"></i> Checkout</h2>
-
-                <?php
-                foreach($message as $msg){
-                    if(strpos($msg, 'error:') === 0){
-                        echo '<div class="alert error"><i class="fas fa-exclamation"></i> ' . substr($msg, 6) . '</div>';
-                    }
-                }
-                ?>
-
-                <form method="POST">
-                    <h3>Delivery Information</h3>
-                    
-                    <div class="form-group">
-                        <label>Full Name *</label>
-                        <input type="text" value="<?php echo htmlspecialchars($user_data['name']); ?>" readonly style="background: var(--light-color);">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" value="<?php echo htmlspecialchars($user_data['email']); ?>" readonly style="background: var(--light-color);">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Phone Number *</label>
-                        <input type="tel" value="<?php echo htmlspecialchars($user_data['phone']); ?>" readonly style="background: var(--light-color);">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Delivery Address *</label>
-                        <textarea name="delivery_address" required><?php echo htmlspecialchars($user_data['address']); ?></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Order Notes (Optional)</label>
-                        <textarea name="notes" placeholder="Special requests or instructions..."></textarea>
-                    </div>
-
-                    <h3>Payment Method</h3>
-                    
-                    <div class="payment-option">
-                        <input type="radio" id="cod" name="payment_method" value="cash_on_delivery" checked>
-                        <label for="cod" style="flex: 1; margin: 0; cursor: pointer;">
-                            <strong><i class="fas fa-money-bill-wave"></i> Cash on Delivery (COD)</strong><br>
-                            <small style="color: var(--text-color);">Pay when your order arrives</small>
-                        </label>
-                    </div>
-
-                    <div class="payment-option">
-                        <input type="radio" id="gcash" name="payment_method" value="gcash">
-                        <label for="gcash" style="flex: 1; margin: 0; cursor: pointer;">
-                            <strong><i class="fas fa-mobile-alt"></i> GCash</strong><br>
-                            <small style="color: var(--text-color);">Send money via GCash mobile app</small>
-                        </label>
-                    </div>
-
-                    <div class="payment-option">
-                        <input type="radio" id="maya" name="payment_method" value="maya">
-                        <label for="maya" style="flex: 1; margin: 0; cursor: pointer;">
-                            <strong><i class="fas fa-digital-tachograph"></i> Maya</strong><br>
-                            <small style="color: var(--text-color);">Maya digital wallet payment</small>
-                        </label>
-                    </div>
-
-                    <div class="payment-option">
-                        <input type="radio" id="bank" name="payment_method" value="bank_transfer">
-                        <label for="bank" style="flex: 1; margin: 0; cursor: pointer;">
-                            <strong><i class="fas fa-university"></i> Bank Transfer</strong><br>
-                            <small style="color: var(--text-color);">BDO, BPI, or other Philippine banks</small>
-                        </label>
-                    </div>
-
-                    <div class="payment-option">
-                        <input type="radio" id="installment" name="payment_method" value="installment">
-                        <label for="installment" style="flex: 1; margin: 0; cursor: pointer;">
-                            <strong><i class="fas fa-credit-card"></i> Credit Card Installment</strong><br>
-                            <small style="color: var(--text-color);">0% interest installment available</small>
-                        </label>
-                    </div>
-
-                    <button type="submit" name="place_order" class="place-order-btn">
-                        <i class="fas fa-check"></i> Place Order
-                    </button>
-                </form>
-            </div>
+<div class="checkout-dashboard">
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Complete Your Order</h1>
+            <p>Secure checkout with multiple payment options available</p>
         </div>
 
-        <div>
-            <div class="order-summary">
-                <h2><i class="fas fa-receipt"></i> Order Summary</h2>
-                
-                <?php
-                foreach($items as $item){
-                    $subtotal = $item['price'] * $item['quantity'];
-                ?>
+        <div class="checkout-grid">
+            <!-- Checkout Form Card -->
+            <div class="checkout-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-shopping-cart"></i> Checkout Details</h2>
+                </div>
+                <div class="card-content">
+
+                    <?php
+                    foreach($message as $msg){
+                        if(strpos($msg, 'error:') === 0){
+                            echo '<div class="alert error"><i class="fas fa-exclamation-triangle"></i> ' . substr($msg, 6) . '</div>';
+                        } elseif(strpos($msg, 'success:') === 0){
+                            echo '<div class="alert success"><i class="fas fa-check-circle"></i> ' . substr($msg, 8) . '</div>';
+                        }
+                    }
+                    ?>
+
+                    <form method="POST" action="checkout.php" id="checkoutForm">
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-user"></i>
+                                Personal Information
+                            </h3>
+
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user_data['name']); ?>" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user_data['email']); ?>" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($user_data['phone']); ?>" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Delivery Address
+                            </h3>
+
+                            <div class="form-group">
+                                <label for="delivery_address">Street Address</label>
+                                <textarea id="delivery_address" name="delivery_address" required><?php echo htmlspecialchars($user_data['address']); ?></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-credit-card"></i>
+                                Payment Method
+                            </h3>
+
+                            <div class="payment-methods">
+                                <div class="payment-option" data-method="cod">
+                                    <input type="radio" id="cod" name="payment_method" value="cash_on_delivery" checked>
+                                    <label for="cod">
+                                        <strong><i class="fas fa-money-bill-wave"></i> Cash on Delivery</strong>
+                                        <small>Pay when your order arrives</small>
+                                    </label>
+                                </div>
+
+                                <div class="payment-option" data-method="gcash">
+                                    <input type="radio" id="gcash" name="payment_method" value="gcash">
+                                    <label for="gcash">
+                                        <strong><i class="fas fa-mobile-alt"></i> GCash</strong>
+                                        <small>Send money via GCash mobile app</small>
+                                    </label>
+                                </div>
+
+                                <div class="payment-option" data-method="maya">
+                                    <input type="radio" id="maya" name="payment_method" value="maya">
+                                    <label for="maya">
+                                        <strong><i class="fas fa-digital-tachograph"></i> Maya</strong>
+                                        <small>Maya digital wallet payment</small>
+                                    </label>
+                                </div>
+
+                                <div class="payment-option" data-method="bank">
+                                    <input type="radio" id="bank" name="payment_method" value="bank_transfer">
+                                    <label for="bank">
+                                        <strong><i class="fas fa-university"></i> Bank Transfer</strong>
+                                        <small>BDO, BPI, or other Philippine banks</small>
+                                    </label>
+                                </div>
+
+                                <div class="payment-option" data-method="installment">
+                                    <input type="radio" id="installment" name="payment_method" value="installment">
+                                        <label for="installment">
+                                            <strong><i class="fas fa-credit-card"></i> Credit Card Installment</strong>
+                                            <small>0% interest installment available</small>
+                                        </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-sticky-note"></i>
+                                Order Notes (Optional)
+                            </h3>
+
+                            <div class="form-group">
+                                <label for="notes">Special Instructions</label>
+                                <textarea id="notes" name="notes" placeholder="Special requests or instructions..."></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" name="place_order" class="place-order-btn" id="placeOrderBtn">
+                            <i class="fas fa-check-circle"></i>
+                            Place Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Summary Card -->
+            <div class="order-summary-card">
+                <div class="summary-header">
+                    <h2><i class="fas fa-receipt"></i> Order Summary</h2>
+                </div>
+                <div class="summary-content">
+                    <?php
+                    foreach($items as $item){
+                        $subtotal = $item['price'] * $item['quantity'];
+                    ?>
+                        <div class="summary-item">
+                            <span><?php echo htmlspecialchars($item['title']); ?> (x<?php echo $item['quantity']; ?>)</span>
+                            <span>₱<?php echo number_format($subtotal, 2); ?></span>
+                        </div>
+                    <?php
+                    }
+                    ?>
+
+                    <div class="summary-divider"></div>
+
                     <div class="summary-item">
-                        <span><?php echo htmlspecialchars($item['title']); ?> x<?php echo $item['quantity']; ?></span>
-                        <span>₱<?php echo number_format($subtotal, 2); ?></span>
+                        <span>Subtotal</span>
+                        <span>₱<?php echo number_format($total, 2); ?></span>
                     </div>
-                <?php
-                }
-                ?>
 
-                <div class="summary-divider"></div>
+                    <div class="summary-item">
+                        <span>Shipping</span>
+                        <span>₱<?php echo number_format(50, 2); ?></span>
+                    </div>
 
-                <div class="summary-item">
-                    <span>Subtotal:</span>
-                    <span>₱<?php echo number_format($total, 2); ?></span>
-                </div>
-
-                <div class="summary-item">
-                    <span>Shipping:</span>
-                    <span>₱50.00</span>
-                </div>
-
-                <div class="summary-divider"></div>
-
-                <div class="summary-total">
-                    <span>Total:</span>
-                    <span>₱<?php echo number_format($total + 50, 2); ?></span>
+                    <div class="summary-total">
+                        <div class="summary-item">
+                            <span>Total</span>
+                            <span>₱<?php echo number_format($total + 50, 2); ?></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -421,10 +738,53 @@ document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
         document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
         this.closest('.payment-option').classList.add('selected');
     });
-    
+
     if(radio.checked){
         radio.closest('.payment-option').classList.add('selected');
     }
+});
+
+// Add smooth animations and interactions
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation and enhancement
+    const form = document.getElementById('checkoutForm');
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+
+    // Add loading state to button on submit
+    form.addEventListener('submit', function(e) {
+        placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        placeOrderBtn.disabled = true;
+        placeOrderBtn.style.opacity = '0.7';
+    });
+
+    // Payment option hover effects
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('mouseenter', function() {
+            if (!this.querySelector('input[type="radio"]').checked) {
+                this.style.transform = 'translateY(-2px)';
+            }
+        });
+
+        option.addEventListener('mouseleave', function() {
+            if (!this.querySelector('input[type="radio"]').checked) {
+                this.style.transform = 'translateY(0)';
+            }
+        });
+    });
+
+    // Form field focus effects
+    document.querySelectorAll('.form-group input, .form-group textarea').forEach(field => {
+        field.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'translateY(-1px)';
+        });
+
+        field.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Smooth scroll to top on page load
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 </script>
 

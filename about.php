@@ -6,41 +6,78 @@ $about = mysqli_fetch_assoc($select_about);
 
 <?php include 'header.php'; ?>
 
-<section class="section">
-    <div class="container">
-        <div class="section-title">
-            <h2>About PTL Best Tinapa</h2>
+<section class="dashboard-section">
+    <div class="section-container">
+        <div class="section-header">
+            <h1 class="section-title">About PTL Best Tinapa</h1>
+            <p class="section-subtitle">Discover our heritage, commitment to quality, and the story behind Bulacan's finest smoked fish.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
-            <div>
-                <h3 style="color: var(--primary-color); margin-bottom: 20px;">Our Story</h3>
-                <p><?php echo $about['content'] ?? 'PTL Best Tinapa has been serving the community with premium quality smoked fish for years. We use traditional smoking methods combined with modern quality control to bring you the finest tinapa products.'; ?></p>
-                <p style="margin-top: 15px;">Every product is made with care and dedication to ensure customer satisfaction and product quality.</p>
-                
-                <div style="margin-top: 30px;">
-                    <h4>Our Values:</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 10px;"></i> Quality First</li>
-                        <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 10px;"></i> Customer Satisfaction</li>
-                        <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 10px;"></i> Traditional Methods</li>
-                        <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 10px;"></i> Fresh Ingredients</li>
-                    </ul>
+        <div class="dashboard-grid-2">
+            <div class="dashboard-card fade-in-up">
+                <div class="card-content">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-book-open"></i> Our Story
+                    </h3>
+                    <p style="line-height: 1.7; margin-bottom: 1rem;"><?php echo $about['content'] ?? 'PTL Best Tinapa has been serving the community with premium quality smoked fish for years. We use traditional smoking methods combined with modern quality control to bring you the finest tinapa products.'; ?></p>
+                    <p style="line-height: 1.7;">Every product is made with care and dedication to ensure customer satisfaction and product quality.</p>
+
+                    <div style="margin-top: 2rem;">
+                        <h4 style="color: var(--text-primary); margin-bottom: 1rem;">Our Values:</h4>
+                        <div style="display: grid; gap: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 24px; height: 24px; background: var(--success-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Quality First</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 24px; height: 24px; background: var(--success-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Customer Satisfaction</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 24px; height: 24px; background: var(--success-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Traditional Methods</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 24px; height: 24px; background: var(--success-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Fresh Ingredients</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div style="background: linear-gradient(135deg, rgba(196, 30, 58, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%); padding: 40px; border-radius: 8px; text-align: center;">
-                <div style="margin-bottom: 30px;">
-                    <div style="font-size: 2.5rem; color: var(--primary-color); font-weight: bold;">15+</div>
-                    <p>Years of Experience</p>
+            <div class="dashboard-card fade-in-up delay-1">
+                <div class="card-header" style="background: var(--primary-gradient);">
+                    <h2><i class="fas fa-chart-line"></i> Our Achievements</h2>
                 </div>
-                <div style="margin-bottom: 30px;">
-                    <div style="font-size: 2.5rem; color: var(--primary-color); font-weight: bold;">10K+</div>
-                    <p>Happy Customers</p>
-                </div>
-                <div>
-                    <div style="font-size: 2.5rem; color: var(--primary-color); font-weight: bold;">100%</div>
-                    <p>Quality Guaranteed</p>
+                <div class="card-content">
+                    <div style="display: grid; gap: 2rem;">
+                        <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-radius: var(--border-radius-lg);">
+                            <div style="font-size: 3rem; font-weight: 900; color: var(--primary-color); margin-bottom: 0.5rem;">15+</div>
+                            <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">Years of Experience</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Serving Bulacan with pride</div>
+                        </div>
+
+                        <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%); border-radius: var(--border-radius-lg);">
+                            <div style="font-size: 3rem; font-weight: 900; color: var(--success-color); margin-bottom: 0.5rem;">10K+</div>
+                            <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">Happy Customers</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Satisfied families across the region</div>
+                        </div>
+
+                        <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%); border-radius: var(--border-radius-lg);">
+                            <div style="font-size: 3rem; font-weight: 900; color: var(--warning-color); margin-bottom: 0.5rem;">100%</div>
+                            <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">Quality Guaranteed</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Every product meets our standards</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
