@@ -201,8 +201,8 @@ This project was developed by:
 - Libunao
 - Licuanan
 
-**Course:** [Your Course Name]
-**Professor:** [Professor's Name]
+**Course:** [CPE 4A]
+**Professor:** [JAN JAN CRUZ]
 **Date:** March 2026
 
 ## 📄 License
