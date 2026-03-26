@@ -150,6 +150,10 @@ Before running this website, make sure you have the following installed:
 - [x] Demo link to deployed app
 - [x] Code is in modern dashboard style with card-based layout, responsive, payment flows
 
+## 🙌 Contributors
+- Kyla
+- Christian
+- Professor (reviewer)
 
 ## 📖 Usage Guide
 
