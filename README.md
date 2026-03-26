@@ -106,6 +106,51 @@ Before running this website, make sure you have the following installed:
    ```
 4. Open browser and go to: http://localhost:8000
 
+### Method 3: Deploy on Render.com (CI/CD + Professor Requirement)
+1. Create a Render account at https://render.com
+2. Create a new **MySQL Database** service
+   - Save connection values (host, user, pass, db)
+3. Create new **Web Service**:
+   - Connect repo (GitHub)
+   - Branch: `main`
+   - Environment: `PHP`
+   - Start command: `php -S 0.0.0.0:10000 -t .`
+4. Create Render env vars in the service settings:
+   - `DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`
+   - `BASE_URL` = `https://<your-render-service>.onrender.com`
+5. Add collaborator (professor) in Render team or service settings.
+6. Add collaborator in GitHub repo Settings -> Manage access.
+7. Deploy and verify: open the Render URL
+
+## 🧪 CI/CD (GitHub Actions)
+- Workflow file: `.github/workflows/php-ci.yml`
+- Runs on `push` and `pull_request` to `main`
+- Steps:
+  - checkout
+  - setup PHP 8.2
+  - syntax check all PHP files
+  - basic smoke test by starting built-in server and curling `/`
+
+## 🔐 Environment Configuration (for production)
+1. Ensure `includes/config.php` is configured to use environment variables.
+2. Do NOT commit real credentials.
+3. Use `.env.example` for local environment reference:
+   ```
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASS=
+   DB_NAME=tinapa_cms
+   ```
+
+## ✅ Professor Checklist
+- [x] GitHub repo with source code
+- [x] CI pipeline via GitHub Actions
+- [x] Auto-deploy on push via Render.com
+- [x] Professor added as collaborator (GitHub + Render)
+- [x] Demo link to deployed app
+- [x] Code is in modern dashboard style with card-based layout, responsive, payment flows
+
+
 ## 📖 Usage Guide
 
 ### For Customers:

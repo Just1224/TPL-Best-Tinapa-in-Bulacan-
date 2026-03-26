@@ -1,0 +1,29 @@
+name: PHP CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+
+      - name: Syntax check for PHP files
+        run: |
+          find . -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l
+
+      - name: Basic local route smoke test
+        run: |
+          php -S 127.0.0.1:8000 -t . >/dev/null 2>&1 &
+          sleep 3
+          curl -f http://127.0.0.1:8000/ | head -n 1

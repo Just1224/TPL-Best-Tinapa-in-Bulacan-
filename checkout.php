@@ -492,6 +492,28 @@ if(isset($_POST['place_order'])){
             font-size: 1.1rem;
         }
 
+        .payment-details-section {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .payment-details-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .payment-method-details {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .payment-method-details.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         @media (max-width: 1024px) {
             .checkout-grid {
                 grid-template-columns: 1fr;
@@ -524,6 +546,10 @@ if(isset($_POST['place_order'])){
                 padding: 1rem 1.5rem;
                 font-size: 1rem;
             }
+
+            .payment-details-section {
+                padding: 1rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -550,6 +576,10 @@ if(isset($_POST['place_order'])){
             .place-order-btn {
                 padding: 1rem 1.5rem;
                 font-size: 1rem;
+            }
+
+            .payment-details-section {
+                padding: 0.75rem;
             }
         }
     </style>
@@ -665,6 +695,111 @@ if(isset($_POST['place_order'])){
                                         </label>
                                 </div>
                             </div>
+
+                            <!-- Payment Details Section -->
+                            <div id="payment-details" class="payment-details-section" style="display: none; margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; border: 1px solid #e5e7eb;">
+                                <h4 style="color: #1f2937; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-info-circle"></i>
+                                    Payment Details
+                                </h4>
+
+                                <!-- GCash Details -->
+                                <div id="gcash-details" class="payment-method-details" style="display: none;">
+                                    <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 2px solid #667eea; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);">
+                                        <h5 style="color: #667eea; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class="fas fa-mobile-alt"></i> GCash Payment Information
+                                        </h5>
+                                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                            <p style="margin: 0; font-weight: 600; color: #1f2937; font-size: 1.1rem;">
+                                                <i class="fas fa-phone"></i> GCash Number: 
+                                                <span style="background: #667eea; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700;">0917-123-4567</span>
+                                            </p>
+                                        </div>
+                                        <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; border-left: 4px solid #ffc107;">
+                                            <p style="margin: 0; color: #856404; font-weight: 500;">
+                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                <strong>Important:</strong> Send the exact amount and take a screenshot of the confirmation. Send the receipt to <strong>tinapa@example.com</strong> for order confirmation.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Maya Details -->
+                                <div id="maya-details" class="payment-method-details" style="display: none;">
+                                    <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 2px solid #f59e0b; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);">
+                                        <h5 style="color: #f59e0b; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class="fas fa-digital-tachograph"></i> Maya Payment Information
+                                        </h5>
+                                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                            <p style="margin: 0; font-weight: 600; color: #1f2937; font-size: 1.1rem;">
+                                                <i class="fas fa-phone"></i> Maya Account: 
+                                                <span style="background: #f59e0b; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700;">0918-123-4567</span>
+                                            </p>
+                                        </div>
+                                        <div style="background: #d1ecf1; padding: 1rem; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                                            <p style="margin: 0; color: #0c5460; font-weight: 500;">
+                                                <i class="fas fa-gift"></i> 
+                                                <strong>Rewards:</strong> Earn points and cashback on your Maya transaction! Send receipt screenshot to <strong>tinapa@example.com</strong>.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bank Transfer Details -->
+                                <div id="bank-details" class="payment-method-details" style="display: none;">
+                                    <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 2px solid #10b981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);">
+                                        <h5 style="color: #10b981; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class="fas fa-university"></i> Bank Transfer Information
+                                        </h5>
+                                        <div style="display: grid; gap: 1rem;">
+                                            <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                                                <p style="margin: 0 0 0.5rem 0; font-weight: 600; color: #1f2937;">
+                                                    <i class="fas fa-landmark"></i> Primary Bank: BDO Unibank
+                                                </p>
+                                                <p style="margin: 0; color: #6b7280;">
+                                                    Account Name: <strong>PTL Best Tinapa</strong><br>
+                                                    Account Number: <strong>1234-5678-9012</strong>
+                                                </p>
+                                            </div>
+                                            <div style="background: #e0f2fe; padding: 1rem; border-radius: 8px; border-left: 4px solid #0284c7;">
+                                                <p style="margin: 0; color: #0c4a6e; font-weight: 500;">
+                                                    <i class="fas fa-info-circle"></i> 
+                                                    <strong>Alternative Banks:</strong> You can also transfer from BPI, Metrobank, or any Philippine bank using InstaPay or PesoNet to the same account details.
+                                                </p>
+                                            </div>
+                                            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; border-left: 4px solid #d97706;">
+                                                <p style="margin: 0; color: #92400e; font-weight: 500;">
+                                                    <i class="fas fa-clock"></i> 
+                                                    <strong>Processing:</strong> Bank transfers take 1-3 hours. Email the bank receipt to <strong>tinapa@example.com</strong> for immediate order confirmation.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Installment Details -->
+                                <div id="installment-details" class="payment-method-details" style="display: none;">
+                                    <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 2px solid #8b5cf6; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);">
+                                        <h5 style="color: #8b5cf6; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class="fas fa-credit-card"></i> Credit Card Installment
+                                        </h5>
+                                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                            <p style="margin: 0; font-weight: 600; color: #1f2937;">
+                                                <i class="fas fa-percentage"></i> 0% Interest Available
+                                            </p>
+                                            <p style="margin: 0.5rem 0 0 0; color: #6b7280;">
+                                                3-month, 6-month, or 12-month plans available
+                                            </p>
+                                        </div>
+                                        <div style="background: #ecfdf5; padding: 1rem; border-radius: 8px; border-left: 4px solid #10b981;">
+                                            <p style="margin: 0; color: #065f46; font-weight: 500;">
+                                                <i class="fas fa-phone"></i> 
+                                                <strong>Contact Us:</strong> Our team will call you after checkout to arrange the installment payment through your bank's partner merchants.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-section">
@@ -750,6 +885,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('checkoutForm');
     const placeOrderBtn = document.getElementById('placeOrderBtn');
 
+    // Payment method selection handling
+    const paymentOptions = document.querySelectorAll('input[name="payment_method"]');
+    const paymentDetails = document.getElementById('payment-details');
+    const methodDetails = document.querySelectorAll('.payment-method-details');
+
+    paymentOptions.forEach(option => {
+        option.addEventListener('change', function() {
+            // Update visual selection
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            this.closest('.payment-option').classList.add('selected');
+
+            // Show/hide payment details
+            const method = this.value;
+
+            // Hide all details first
+            methodDetails.forEach(detail => {
+                detail.style.display = 'none';
+                detail.style.opacity = '0';
+                detail.style.transform = 'translateY(-10px)';
+            });
+
+            // Show relevant details with animation
+            if (method === 'gcash') {
+                showPaymentDetails('gcash-details');
+            } else if (method === 'maya') {
+                showPaymentDetails('maya-details');
+            } else if (method === 'bank_transfer') {
+                showPaymentDetails('bank-details');
+            } else if (method === 'installment') {
+                showPaymentDetails('installment-details');
+            } else {
+                // COD - hide details
+                paymentDetails.style.display = 'none';
+                paymentDetails.style.opacity = '0';
+                paymentDetails.style.transform = 'translateY(-10px)';
+            }
+        });
+    });
+
+    function showPaymentDetails(detailId) {
+        const detailElement = document.getElementById(detailId);
+        paymentDetails.style.display = 'block';
+
+        setTimeout(() => {
+            paymentDetails.style.opacity = '1';
+            paymentDetails.style.transform = 'translateY(0)';
+            detailElement.style.display = 'block';
+
+            setTimeout(() => {
+                detailElement.style.opacity = '1';
+                detailElement.style.transform = 'translateY(0)';
+            }, 100);
+        }, 50);
+    }
+
     // Add loading state to button on submit
     form.addEventListener('submit', function(e) {
         placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
@@ -785,6 +975,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Smooth scroll to top on page load
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Initialize COD as selected (default)
+    document.getElementById('cod').checked = true;
+    document.querySelector('[data-method="cod"]').classList.add('selected');
 });
 </script>
 

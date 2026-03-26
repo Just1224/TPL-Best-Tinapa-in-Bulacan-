@@ -190,10 +190,7 @@ if(isset($_GET['read'])){
 
 </body>
 </html>
-}else{
-   echo "<p>No messages found.</p>";
-}
-?>
+
 
 </body>
 </html>
