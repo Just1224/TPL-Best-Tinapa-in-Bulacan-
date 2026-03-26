@@ -19,8 +19,8 @@ if(!isset($admin_id)){
       <!-- Total Services -->
       <div class="box">
          <?php
-            $select_services = mysqli_query($conn, "SELECT * FROM `services`") or die('query failed');
-            $number_of_services = mysqli_num_rows($select_services);
+            $select_services = db_query("SELECT * FROM services");
+            $number_of_services = db_num_rows($select_services);
          ?>
          <h3><?php echo $number_of_services; ?></h3>
          <p>Total Products</p>
@@ -30,8 +30,8 @@ if(!isset($admin_id)){
       <!-- Website Content -->
       <div class="box">
          <?php
-            $select_content = mysqli_query($conn, "SELECT * FROM `site_content`") or die('query failed');
-            $number_of_content = mysqli_num_rows($select_content);
+            $select_content = db_query("SELECT * FROM site_content");
+            $number_of_content = db_num_rows($select_content);
          ?>
          <h3><?php echo $number_of_content; ?></h3>
          <p>Content Sections</p>
@@ -41,8 +41,8 @@ if(!isset($admin_id)){
       <!-- Users -->
       <div class="box">
          <?php
-            $select_users = mysqli_query($conn, "SELECT * FROM `users`") or die('query failed');
-            $number_of_users = mysqli_num_rows($select_users);
+            $select_users = db_query("SELECT * FROM users");
+            $number_of_users = db_num_rows($select_users);
          ?>
          <h3><?php echo $number_of_users; ?></h3>
          <p>Registered Users</p>
@@ -52,8 +52,8 @@ if(!isset($admin_id)){
       <!-- Messages -->
       <div class="box">
          <?php
-            $select_messages = mysqli_query($conn, "SELECT * FROM `messages`") or die('query failed');
-            $number_of_messages = mysqli_num_rows($select_messages);
+            $select_messages = db_query("SELECT * FROM messages");
+            $number_of_messages = db_num_rows($select_messages);
          ?>
          <h3><?php echo $number_of_messages; ?></h3>
          <p>Contact Messages</p>
@@ -94,8 +94,8 @@ if(!isset($admin_id)){
    <!-- Messages -->
    <div class="box">
       <?php
-         $select_messages = mysqli_query($conn, "SELECT * FROM `message`") or die('query failed');
-         $number_of_messages = mysqli_num_rows($select_messages);
+         $select_messages = db_query("SELECT * FROM message");
+         $number_of_messages = db_num_rows($select_messages);
       ?>
       <h3><?php echo $number_of_messages; ?></h3>
       <p><a href="messages.php">View Messages</a></p>

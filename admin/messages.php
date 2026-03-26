@@ -5,18 +5,14 @@
 // Delete message
 if(isset($_GET['delete'])){
    $delete_id = intval($_GET['delete']);
-   $stmt = $conn->prepare("DELETE FROM messages WHERE id = ?");
-   $stmt->bind_param("i", $delete_id);
-   $stmt->execute();
+   db_query("DELETE FROM messages WHERE id = :id", ['id' => $delete_id]);
    $_GET['delete'] = null;
 }
 
 // Mark as read
 if(isset($_GET['read'])){
    $read_id = intval($_GET['read']);
-   $stmt = $conn->prepare("UPDATE messages SET is_read = 1 WHERE id = ?");
-   $stmt->bind_param("i", $read_id);
-   $stmt->execute();
+   db_query("UPDATE messages SET is_read = 1 WHERE id = :id", ['id' => $read_id]);
 }
 ?>
 
@@ -146,10 +142,10 @@ if(isset($_GET['read'])){
       <h2><i class="fas fa-envelope"></i> Customer Messages</h2>
 
       <?php
-      $select_messages = mysqli_query($conn, "SELECT * FROM messages ORDER BY id DESC");
+      $select_messages = db_query("SELECT * FROM messages ORDER BY id DESC");
 
-      if(mysqli_num_rows($select_messages) > 0){
-         while($fetch_msg = mysqli_fetch_assoc($select_messages)){
+      if(db_num_rows($select_messages) > 0){
+         while($fetch_msg = db_fetch_assoc($select_messages)){
             $class = ($fetch_msg['is_read'] == 0) ? 'unread' : '';
       ?>
          <div class="message-item <?php echo $class; ?>">

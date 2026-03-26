@@ -12,13 +12,10 @@ if(isset($_POST['submit'])){
         $message[] = 'Please enter email and password';
     } else {
         // Check in users table (regular users only)
-        $select = $conn->prepare("SELECT id, name, email, password FROM users WHERE email = ?");
-        $select->bind_param("s", $email);
-        $select->execute();
-        $result = $select->get_result();
+        $result = db_query("SELECT id, name, email, password FROM users WHERE email = :email", ['email' => $email]);
         
-        if($result->num_rows > 0){
-            $row = $result->fetch_assoc();
+        if(db_num_rows($result) > 0){
+            $row = db_fetch_assoc($result);
             
             // Simple password check
             if($row['password'] === $password){

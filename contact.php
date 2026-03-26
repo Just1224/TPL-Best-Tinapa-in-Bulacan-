@@ -12,7 +12,11 @@ if(isset($_POST['send'])){
     if(empty($name) || empty($email) || empty($msg)){
         $message[] = 'Please fill all required fields';
     } else {
-        $insert = mysqli_query($conn, "INSERT INTO messages(name, email, message) VALUES('$name','$email','$msg')");
+        $insert = db_query("INSERT INTO messages (name, email, message) VALUES (:name, :email, :message)", [
+            'name' => $name,
+            'email' => $email,
+            'message' => $msg,
+        ]);
         if($insert){
             $message[] = 'Message sent successfully! We will contact you soon.';
         } else {

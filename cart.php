@@ -12,12 +12,8 @@ if(!isset($_SESSION['user_id'])){
 $user_id = $_SESSION['user_id'];
 
 // Verify user exists in users table
-$verify_user = $conn->prepare("SELECT id FROM users WHERE id = ?");
-$verify_user->bind_param("i", $user_id);
-$verify_user->execute();
-$verify_result = $verify_user->get_result();
-
-if($verify_result->num_rows == 0){
+$verify_user = db_query("SELECT id FROM users WHERE id = :user_id", ['user_id' => $user_id]);
+if(db_num_rows($verify_user) == 0){
     // User doesn't exist in users table - they may be admin or invalid session
     session_destroy();
     header('location: login.php');
@@ -33,25 +29,29 @@ if(isset($_POST['add_to_cart'])){
 
     if($quantity > 0){
         // Check if item already in cart
-        $check = $conn->prepare("SELECT id, quantity FROM cart WHERE user_id = ? AND service_id = ?");
-        $check->bind_param("ii", $user_id, $service_id);
-        $check->execute();
-        $result = $check->get_result();
+        $result = db_query("SELECT id, quantity FROM cart WHERE user_id = :user_id AND service_id = :service_id", [
+            'user_id' => $user_id,
+            'service_id' => $service_id,
+        ]);
 
-        if($result->num_rows > 0){
+        if(db_num_rows($result) > 0){
             // Update quantity
-            $row = $result->fetch_assoc();
+            $row = db_fetch_assoc($result);
             $new_qty = $row['quantity'] + $quantity;
-            $update = $conn->prepare("UPDATE cart SET quantity = ? WHERE user_id = ? AND service_id = ?");
-            $update->bind_param("iii", $new_qty, $user_id, $service_id);
-            if($update->execute()){
-                $message[] = 'quantity_updated';
-            }
+            db_query("UPDATE cart SET quantity = :quantity WHERE user_id = :user_id AND service_id = :service_id", [
+                'quantity' => $new_qty,
+                'user_id' => $user_id,
+                'service_id' => $service_id,
+            ]);
+            $message[] = 'quantity_updated';
         } else {
             // Insert new item
-            $insert = $conn->prepare("INSERT INTO cart (user_id, service_id, quantity) VALUES (?, ?, ?)");
-            $insert->bind_param("iii", $user_id, $service_id, $quantity);
-            if($insert->execute()){
+            $insert = db_query("INSERT INTO cart (user_id, service_id, quantity) VALUES (:user_id, :service_id, :quantity)", [
+                'user_id' => $user_id,
+                'service_id' => $service_id,
+                'quantity' => $quantity,
+            ]);
+            if($insert){
                 $message[] = 'added_to_cart';
             } else {
                 $message[] = 'error:Failed to add to cart';
@@ -66,33 +66,34 @@ if(isset($_POST['update_quantity'])){
     $quantity = intval($_POST['quantity']);
 
     if($quantity > 0){
-        $update = $conn->prepare("UPDATE cart SET quantity = ? WHERE id = ? AND user_id = ?");
-        $update->bind_param("iii", $quantity, $cart_id, $user_id);
-        $update->execute();
+        db_query("UPDATE cart SET quantity = :quantity WHERE id = :id AND user_id = :user_id", [
+            'quantity' => $quantity,
+            'id' => $cart_id,
+            'user_id' => $user_id,
+        ]);
     } else {
         // Delete if quantity is 0
-        $delete = $conn->prepare("DELETE FROM cart WHERE id = ? AND user_id = ?");
-        $delete->bind_param("ii", $cart_id, $user_id);
-        $delete->execute();
+        db_query("DELETE FROM cart WHERE id = :id AND user_id = :user_id", [
+            'id' => $cart_id,
+            'user_id' => $user_id,
+        ]);
     }
 }
 
 // Remove from cart
 if(isset($_GET['remove'])){
     $cart_id = intval($_GET['remove']);
-    $delete = $conn->prepare("DELETE FROM cart WHERE id = ? AND user_id = ?");
-    $delete->bind_param("ii", $cart_id, $user_id);
-    $delete->execute();
+    db_query("DELETE FROM cart WHERE id = :id AND user_id = :user_id", [
+        'id' => $cart_id,
+        'user_id' => $user_id,
+    ]);
 }
 
 // Get cart items
-$select_cart = $conn->prepare("SELECT c.id, c.quantity, s.id as service_id, s.title, s.price, s.image FROM cart c 
+$cart_result = db_query("SELECT c.id, c.quantity, s.id as service_id, s.title, s.price, s.image FROM cart c 
                                JOIN services s ON c.service_id = s.id 
-                               WHERE c.user_id = ? 
-                               ORDER BY c.added_at DESC");
-$select_cart->bind_param("i", $user_id);
-$select_cart->execute();
-$cart_result = $select_cart->get_result();
+                               WHERE c.user_id = :user_id 
+                               ORDER BY c.added_at DESC", ['user_id' => $user_id]);
 ?>
 
 <!DOCTYPE html>

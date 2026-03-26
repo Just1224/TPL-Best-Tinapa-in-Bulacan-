@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mysqli gd mbstring exif pcntl bcmath xml
+    && docker-php-ext-install pdo_mysql pdo_pgsql pgsql mysqli gd mbstring exif pcntl bcmath xml
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite

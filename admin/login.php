@@ -12,13 +12,10 @@ if(isset($_POST['submit'])){
         $message[] = 'Please enter email and password';
     } else {
         // Use prepared statement to prevent SQL injection
-        $stmt = $conn->prepare("SELECT * FROM admin WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $select = $stmt->get_result();
+        $select = db_query("SELECT * FROM admin WHERE email = :email", ['email' => $email]);
         
-        if($select->num_rows > 0){
-            $row = $select->fetch_assoc();
+        if(db_num_rows($select) > 0){
+            $row = db_fetch_assoc($select);
             
             // Check if user has admin role
             $is_admin = ($row['role'] === 'admin');

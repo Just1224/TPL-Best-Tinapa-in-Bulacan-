@@ -13,7 +13,12 @@ if(isset($_POST['add_service'])){
    $image_tmp = $_FILES['image']['tmp_name'];
    $image_folder = '../uploads/'.$image;
 
-   $insert = mysqli_query($conn, "INSERT INTO services(title, description, image, price) VALUES('$title','$description','$image','$price')");
+   $insert = db_query("INSERT INTO services (title, description, image, price) VALUES (:title, :description, :image, :price)", [
+       'title' => $title,
+       'description' => $description,
+       'image' => $image,
+       'price' => $price,
+   ]);
    
    if($insert){
       if(move_uploaded_file($image_tmp, $image_folder)){
@@ -27,8 +32,8 @@ if(isset($_POST['add_service'])){
 // DELETE SERVICE
 if(isset($_GET['delete'])){
    $delete_id = $_GET['delete'];
-   $select = mysqli_query($conn, "SELECT image FROM services WHERE id = '$delete_id'");
-   $row = mysqli_fetch_assoc($select);
+   $select = db_query("SELECT image FROM services WHERE id = :id", ['id' => $delete_id]);
+   $row = db_fetch_assoc($select);
    
    if($row){
       if(file_exists('../uploads/'.$row['image'])){
@@ -36,7 +41,7 @@ if(isset($_GET['delete'])){
       }
    }
    
-   $delete = mysqli_query($conn, "DELETE FROM services WHERE id = '$delete_id'");
+   $delete = db_query("DELETE FROM services WHERE id = :id", ['id' => $delete_id]);
    if($delete){
       $message[] = 'success:Product deleted successfully!';
    }
@@ -49,7 +54,12 @@ if(isset($_POST['update_service'])){
    $description = htmlspecialchars($_POST['description']);
    $price = htmlspecialchars($_POST['price']);
 
-   $update = mysqli_query($conn, "UPDATE services SET title='$title', description='$description', price='$price' WHERE id='$id'");
+   $update = db_query("UPDATE services SET title = :title, description = :description, price = :price WHERE id = :id", [
+       'title' => $title,
+       'description' => $description,
+       'price' => $price,
+       'id' => $id,
+   ]);
    
    if($update){
       $message[] = 'success:Product updated successfully!';
@@ -106,8 +116,8 @@ $message = $message ?? [];
    <h2><i class="fas fa-list"></i> All Products</h2>
    
    <?php
-   $select_services = mysqli_query($conn, "SELECT * FROM services") or die('query failed');
-   if(mysqli_num_rows($select_services) > 0){
+   $select_services = db_query("SELECT * FROM services");
+   if(db_num_rows($select_services) > 0){
    ?>
       <table style="width: 100%; border-collapse: collapse;">
          <thead>
@@ -121,7 +131,7 @@ $message = $message ?? [];
          </thead>
          <tbody>
             <?php
-            while($fetch_services = mysqli_fetch_assoc($select_services)){
+            while($fetch_services = db_fetch_assoc($select_services)){
             ?>
             <tr style="border-bottom: 1px solid var(--border-color);">
                <td style="padding: 12px; border: 1px solid var(--border-color);">

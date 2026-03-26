@@ -1,7 +1,7 @@
 <?php
 @include 'includes/config.php';
-$select_about = mysqli_query($conn, "SELECT * FROM site_content WHERE section='about'");
-$about = mysqli_fetch_assoc($select_about);
+$select_about = db_query("SELECT * FROM site_content WHERE section = :section", ['section' => 'about']);
+$about = db_fetch_assoc($select_about);
 ?>
 
 <?php include 'header.php'; ?>

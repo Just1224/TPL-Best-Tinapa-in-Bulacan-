@@ -13,27 +13,22 @@ $user_id = $_SESSION['user_id'];
 $message = [];
 
 // Get user information
-$user_stmt = $conn->prepare("SELECT name, email, phone, address FROM users WHERE id = ?");
-$user_stmt->bind_param("i", $user_id);
-$user_stmt->execute();
-$user_data = $user_stmt->get_result()->fetch_assoc();
+$user_data_stmt = db_query("SELECT name, email, phone, address FROM users WHERE id = :user_id", ['user_id' => $user_id]);
+$user_data = db_fetch_assoc($user_data_stmt);
 
 // Get cart items and calculate total
-$select_cart = $conn->prepare("SELECT c.id, c.quantity, s.id as service_id, s.title, s.price FROM cart c 
+$cart_result = db_query("SELECT c.id, c.quantity, s.id as service_id, s.title, s.price FROM cart c 
                                JOIN services s ON c.service_id = s.id 
-                               WHERE c.user_id = ?");
-$select_cart->bind_param("i", $user_id);
-$select_cart->execute();
-$cart_result = $select_cart->get_result();
+                               WHERE c.user_id = :user_id", ['user_id' => $user_id]);
 
-if($cart_result->num_rows == 0){
+if(db_num_rows($cart_result) == 0){
     header('location: cart.php');
     exit();
 }
 
 $total = 0;
 $items = [];
-while($item = $cart_result->fetch_assoc()){
+while($item = db_fetch_assoc($cart_result)){
     $subtotal = $item['price'] * $item['quantity'];
     $total += $subtotal;
     $items[] = $item;
@@ -54,27 +49,38 @@ if(isset($_POST['place_order'])){
         // Create order
         $order_number = 'ORD-' . date('Ymd') . '-' . rand(1000, 9999);
         
-        $insert_order = $conn->prepare("INSERT INTO orders (order_number, user_id, total_amount, payment_method, customer_name, customer_email, customer_phone, delivery_address, notes) 
-                                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $insert_order->bind_param("sidssssss", $order_number, $user_id, $total_amount, $payment_method, 
-                                   $user_data['name'], $user_data['email'], $user_data['phone'], $delivery_address, $notes);
+        $insert_order = db_query("INSERT INTO orders (order_number, user_id, total_amount, payment_method, customer_name, customer_email, customer_phone, delivery_address, notes) 
+                                       VALUES (:order_number, :user_id, :total_amount, :payment_method, :customer_name, :customer_email, :customer_phone, :delivery_address, :notes)", [
+            'order_number' => $order_number,
+            'user_id' => $user_id,
+            'total_amount' => $total_amount,
+            'payment_method' => $payment_method,
+            'customer_name' => $user_data['name'],
+            'customer_email' => $user_data['email'],
+            'customer_phone' => $user_data['phone'],
+            'delivery_address' => $delivery_address,
+            'notes' => $notes,
+        ]);
         
-        if($insert_order->execute()){
-            $order_id = $insert_order->insert_id;
+        if($insert_order){
+            $order_id = db_insert_id();
 
             // Insert order items
             foreach($items as $item){
                 $subtotal = $item['price'] * $item['quantity'];
-                $insert_item = $conn->prepare("INSERT INTO order_items (order_id, service_id, product_name, quantity, price, subtotal) 
-                                              VALUES (?, ?, ?, ?, ?, ?)");
-                $insert_item->bind_param("iisssi", $order_id, $item['service_id'], $item['title'], $item['quantity'], $item['price'], $subtotal);
-                $insert_item->execute();
+                db_query("INSERT INTO order_items (order_id, service_id, product_name, quantity, price, subtotal) 
+                                              VALUES (:order_id, :service_id, :product_name, :quantity, :price, :subtotal)", [
+                    'order_id' => $order_id,
+                    'service_id' => $item['service_id'],
+                    'product_name' => $item['title'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $subtotal,
+                ]);
             }
 
             // Clear cart
-            $clear_cart = $conn->prepare("DELETE FROM cart WHERE user_id = ?");
-            $clear_cart->bind_param("i", $user_id);
-            $clear_cart->execute();
+            db_query("DELETE FROM cart WHERE user_id = :user_id", ['user_id' => $user_id]);
 
             // Redirect to order confirmation
             header("location: order_confirmation.php?order_id=$order_id");

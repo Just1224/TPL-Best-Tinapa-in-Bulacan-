@@ -11,10 +11,11 @@ $order_id = intval($_GET['order_id']);
 $user_id = $_SESSION['user_id'] ?? 0;
 
 // Get order details
-$order_stmt = $conn->prepare("SELECT * FROM orders WHERE id = ? AND user_id = ?");
-$order_stmt->bind_param("ii", $order_id, $user_id);
-$order_stmt->execute();
-$order = $order_stmt->get_result()->fetch_assoc();
+$order_stmt = db_query("SELECT * FROM orders WHERE id = :order_id AND user_id = :user_id", [
+    'order_id' => $order_id,
+    'user_id' => $user_id,
+]);
+$order = db_fetch_assoc($order_stmt);
 
 if(!$order){
     header('location: index.php');
@@ -22,10 +23,7 @@ if(!$order){
 }
 
 // Get order items
-$items_stmt = $conn->prepare("SELECT * FROM order_items WHERE order_id = ?");
-$items_stmt->bind_param("i", $order_id);
-$items_stmt->execute();
-$items = $items_stmt->get_result();
+$items = db_query("SELECT * FROM order_items WHERE order_id = :order_id", ['order_id' => $order_id]);
 ?>
 
 <!DOCTYPE html>
@@ -318,7 +316,7 @@ $items = $items_stmt->get_result();
                     <?php
                     $total_items = 0;
                     $total_price = 0;
-                    while($item = $items->fetch_assoc()){
+                    while($item = db_fetch_assoc($items)){
                         $total_items += $item['quantity'];
                         $total_price += $item['subtotal'];
                     ?>

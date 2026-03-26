@@ -136,11 +136,21 @@ Before running this website, make sure you have the following installed:
 2. Do NOT commit real credentials.
 3. Use `.env.example` for local environment reference:
    ```
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASS=
+   DB_DRIVER=pgsql
+   DB_HOST=127.0.0.1
+   DB_PORT=5432
+   DB_USER=postgres
+   DB_PASS=your_password
    DB_NAME=tinapa_cms
    ```
+4. For MySQL compatibility, set `DB_DRIVER=mysql`, plus `DB_PORT=3306`.
+5. In Render, add environment variables to Web Service:
+   - `DB_DRIVER` = `pgsql` (recommended) or `mysql`
+   - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME` as per database connection details
+   - `DB_URL` is optional and not used by the app.
+   
+   "`DB_HOST` must be real DB hostname, not `localhost` when using Render external DB service."
+
 
 ## ✅ Professor Checklist
 - [x] GitHub repo with source code

@@ -9,13 +9,15 @@ if(isset($_POST['update'])){
    $content = $_POST['content'] ?? '';
 
    if($section && $title){
-      $stmt = $conn->prepare("UPDATE site_content SET title = ?, content = ?, updated_at = NOW() WHERE section = ?");
-      $stmt->bind_param("sss", $title, $content, $section);
-      
-      if($stmt->execute()){
+      try {
+         db_query("UPDATE site_content SET title = :title, content = :content, updated_at = NOW() WHERE section = :section", [
+             'title' => $title,
+             'content' => $content,
+             'section' => $section,
+         ]);
          $success_msg = "Content updated successfully!";
-      } else {
-         $error_msg = "Failed to update content.";
+      } catch (PDOException $e) {
+         $error_msg = "Failed to update content: " . $e->getMessage();
       }
    } else {
       $error_msg = "Please fill in all required fields.";
@@ -23,7 +25,7 @@ if(isset($_POST['update'])){
 }
 
 // Fetch content
-$select_content = mysqli_query($conn, "SELECT * FROM site_content ORDER BY section") or die('query failed');
+$select_content = db_query("SELECT * FROM site_content ORDER BY section");
 ?>
 
 <!DOCTYPE html>
@@ -191,7 +193,7 @@ $select_content = mysqli_query($conn, "SELECT * FROM site_content ORDER BY secti
     <div class="admin-section">
         <h2><i class="fas fa-file-alt"></i> Edit Website Content</h2>
 
-        <?php while($row = mysqli_fetch_assoc($select_content)){ ?>
+        <?php while($row = db_fetch_assoc($select_content)){ ?>
             <div class="content-editor">
                 <div class="content-editor-header">
                     <h3><?php echo htmlspecialchars($row['section']); ?></h3>

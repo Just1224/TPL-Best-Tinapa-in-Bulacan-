@@ -10,10 +10,7 @@ if(!isset($_SESSION['user_id'])){
 $user_id = $_SESSION['user_id'];
 
 // Get all orders
-$orders_stmt = $conn->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC");
-$orders_stmt->bind_param("i", $user_id);
-$orders_stmt->execute();
-$orders_result = $orders_stmt->get_result();
+$orders_result = db_query("SELECT * FROM orders WHERE user_id = :user_id ORDER BY created_at DESC", ['user_id' => $user_id]);
 ?>
 
 <!DOCTYPE html>
@@ -281,13 +278,10 @@ $orders_result = $orders_stmt->get_result();
     </div>
 
     <?php
-    if($orders_result->num_rows > 0){
-        while($order = $orders_result->fetch_assoc()){
+    if(db_num_rows($orders_result) > 0){
+        while($order = db_fetch_assoc($orders_result)){
             // Get order items
-            $items_stmt = $conn->prepare("SELECT product_name, quantity, price, subtotal FROM order_items WHERE order_id = ?");
-            $items_stmt->bind_param("i", $order['id']);
-            $items_stmt->execute();
-            $items = $items_stmt->get_result();
+            $items = db_query("SELECT product_name, quantity, price, subtotal FROM order_items WHERE order_id = :order_id", ['order_id' => $order['id']]);
     ?>
         <div class="order-card">
             <div class="order-header">
@@ -308,7 +302,7 @@ $orders_result = $orders_stmt->get_result();
             <div class="order-body">
                 <div class="order-items-list">
                     <?php
-                    while($item = $items->fetch_assoc()){
+                    while($item = db_fetch_assoc($items)){
                     ?>
                         <div class="order-item">
                             <div class="item-info">

@@ -18,26 +18,24 @@ if(isset($_POST['submit'])){
         $message[] = 'Passwords do not match';
     } else {
         // Check if email already exists in users table
-        $select = $conn->prepare("SELECT id FROM users WHERE email = ?");
-        $select->bind_param("s", $email);
-        $select->execute();
-        $check_result = $select->get_result();
+        $check_result = db_query("SELECT id FROM users WHERE email = :email", ['email' => $email]);
         
-        if($check_result->num_rows > 0){
+        if(db_num_rows($check_result) > 0){
             $message[] = 'Email already registered as a user';
         } else {
             // Check if email exists in admin table
-            $check_admin = $conn->prepare("SELECT id FROM admin WHERE email = ?");
-            $check_admin->bind_param("s", $email);
-            $check_admin->execute();
-            if($check_admin->get_result()->num_rows > 0){
+            $check_admin = db_query("SELECT id FROM admin WHERE email = :email", ['email' => $email]);
+            if(db_num_rows($check_admin) > 0){
                 $message[] = 'Email already registered as admin';
             } else {
                 // Insert new user
-                $insert = $conn->prepare("INSERT INTO users(name, email, password, phone, address) VALUES (?, ?, ?, '', '')");
-                $insert->bind_param("sss", $name, $email, $password);
+                $insert = db_query("INSERT INTO users (name, email, password, phone, address) VALUES (:name, :email, :password, '', '')", [
+                    'name' => $name,
+                    'email' => $email,
+                    'password' => $password,
+                ]);
                 
-                if($insert->execute()){
+                if($insert){
                     $message[] = 'success:Registration successful! You can now login.';
                 } else {
                     $message[] = 'Registration failed. Please try again.';

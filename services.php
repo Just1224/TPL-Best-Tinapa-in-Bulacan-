@@ -14,10 +14,10 @@ session_start();
 
         <div class="products-grid">
             <?php
-            $select_services = mysqli_query($conn, "SELECT * FROM services");
+            $select_services = db_query("SELECT * FROM services");
 
-            if(mysqli_num_rows($select_services) > 0){
-                while($row = mysqli_fetch_assoc($select_services)){
+            if(db_num_rows($select_services) > 0){
+                while($row = db_fetch_assoc($select_services)){
             ?>
                 <div class="product-card fade-in-up">
                     <div class="product-image">

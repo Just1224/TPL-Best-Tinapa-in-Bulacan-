@@ -12,8 +12,8 @@ $user_id = $_SESSION['user_id'];
 $message = [];
 
 // Fetch user info
-$select = mysqli_query($conn, "SELECT * FROM users WHERE id = '$user_id'");
-$user = mysqli_fetch_assoc($select);
+$select = db_query("SELECT * FROM users WHERE id = :user_id", ['user_id' => $user_id]);
+$user = db_fetch_assoc($select);
 
 // Update profile
 if(isset($_POST['update'])){
@@ -25,7 +25,12 @@ if(isset($_POST['update'])){
     $confirm_password = htmlspecialchars($_POST['confirm_password']);
 
     if(!empty($name)){
-        $update = mysqli_query($conn, "UPDATE users SET name='$name', phone='$phone', address='$address' WHERE id='$user_id'");
+        $update = db_query("UPDATE users SET name = :name, phone = :phone, address = :address WHERE id = :user_id", [
+            'name' => $name,
+            'phone' => $phone,
+            'address' => $address,
+            'user_id' => $user_id,
+        ]);
         if($update){
             $message[] = 'success:Profile updated successfully!';
             $_SESSION['user_name'] = $name;
@@ -41,7 +46,10 @@ if(isset($_POST['update'])){
         } elseif($new_password !== $confirm_password){
             $message[] = 'Passwords do not match';
         } else {
-            $update = mysqli_query($conn, "UPDATE users SET password='$new_password' WHERE id='$user_id'");
+            $update = db_query("UPDATE users SET password = :password WHERE id = :user_id", [
+                'password' => $new_password,
+                'user_id' => $user_id,
+            ]);
             if($update){
                 $message[] = 'success:Password changed successfully!';
             }

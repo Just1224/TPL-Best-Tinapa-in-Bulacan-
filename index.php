@@ -3,8 +3,8 @@
 session_start();
 
 // Fetch homepage content
-$select_home = mysqli_query($conn, "SELECT * FROM site_content WHERE section='home'");
-$home = mysqli_fetch_assoc($select_home);
+$select_home = db_query("SELECT * FROM site_content WHERE section = :section", ['section' => 'home']);
+$home = db_fetch_assoc($select_home);
 ?>
 
 <?php include 'header.php'; ?>
@@ -27,10 +27,10 @@ $home = mysqli_fetch_assoc($select_home);
 
         <div class="products-grid">
             <?php
-            $select_services = mysqli_query($conn, "SELECT * FROM services");
+            $select_services = db_query("SELECT * FROM services");
 
-            if(mysqli_num_rows($select_services) > 0){
-                while($row = mysqli_fetch_assoc($select_services)){
+            if(db_num_rows($select_services) > 0){
+                while($row = db_fetch_assoc($select_services)){
             ?>
                 <div class="product-card fade-in-up">
                     <div class="product-image">
