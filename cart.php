@@ -13,7 +13,8 @@ $user_id = $_SESSION['user_id'];
 
 // Verify user exists in users table
 $verify_user = db_query("SELECT id FROM users WHERE id = :user_id", ['user_id' => $user_id]);
-if(db_num_rows($verify_user) == 0){
+if(db_num_rows($verify_user) === 0){
+
     // User doesn't exist in users table - they may be admin or invalid session
     session_destroy();
     header('location: login.php');

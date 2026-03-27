@@ -56,6 +56,7 @@ if(!isset($admin_id)){
             $number_of_messages = db_num_rows($select_messages);
          ?>
          <h3><?php echo $number_of_messages; ?></h3>
+
          <p>Contact Messages</p>
          <a href="messages.php" class="btn btn-small">View</a>
       </div>
@@ -91,15 +92,8 @@ if(!isset($admin_id)){
 
 <?php @include 'footer_admin.php'; ?>
 
-   <!-- Messages -->
-   <div class="box">
-      <?php
-         $select_messages = db_query("SELECT * FROM message");
-         $number_of_messages = db_num_rows($select_messages);
-      ?>
-      <h3><?php echo $number_of_messages; ?></h3>
-      <p><a href="messages.php">View Messages</a></p>
-   </div>
+
+
 
    <!-- Logout -->
    <div class="box">
