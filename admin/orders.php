@@ -8,38 +8,34 @@ if(isset($_POST['update_status'])){
     $order_status = $_POST['order_status'];
     $payment_status = $_POST['payment_status'] ?? 'pending';
 
-    $update = $conn->prepare("UPDATE orders SET order_status = ?, payment_status = ? WHERE id = ?");
-    $update->bind_param("ssi", $order_status, $payment_status, $order_id);
-    $update->execute();
+db_query("UPDATE orders SET order_status = ?, payment_status = ? WHERE id = ?", ['order_status' => $order_status, 'payment_status' => $payment_status, 'order_id' => $order_id]);
+
 }
 
 // Delete order
 if(isset($_GET['delete'])){
     $order_id = intval($_GET['delete']);
-    $delete = $conn->prepare("DELETE FROM order_items WHERE order_id = ?");
-    $delete->bind_param("i", $order_id);
-    $delete->execute();
-    
-    $delete_order = $conn->prepare("DELETE FROM orders WHERE id = ?");
-    $delete_order->bind_param("i", $order_id);
-    $delete_order->execute();
+db_query("DELETE FROM order_items WHERE order_id = ?", ['order_id' => $order_id]);
+
+db_query("DELETE FROM orders WHERE id = ?", ['order_id' => $order_id]);
+
 }
 
 // Get all orders
-$select_orders = $conn->prepare("SELECT o.*, u.email as user_email FROM orders o LEFT JOIN users u ON o.user_id = u.id ORDER BY o.created_at DESC");
-$select_orders->execute();
-$orders_result = $select_orders->get_result();
+$orders_result = db_query("SELECT o.*, u.email as user_email FROM orders o LEFT JOIN users u ON o.user_id = u.id ORDER BY o.created_at DESC");
+
 
 // Get statistics
 $stats = [];
-$stats_stmt = $conn->prepare("SELECT 
+$stats_result = db_query("SELECT 
     COUNT(*) as total_orders,
     SUM(total_amount) as total_revenue,
     SUM(CASE WHEN order_status = 'delivered' THEN 1 ELSE 0 END) as completed_orders,
     SUM(CASE WHEN payment_status = 'pending' THEN 1 ELSE 0 END) as pending_payments
 FROM orders");
-$stats_stmt->execute();
-$stats = $stats_stmt->get_result()->fetch_assoc();
+$stats = $stats_result->fetch(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <!DOCTYPE html>
