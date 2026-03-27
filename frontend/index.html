@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tinapa Simple App</title>
+</head>
+<body>
+<h1>PTL Best Tinapa</h1>
+<button onclick="loadProducts()">Load Products</button>
+<div id="products"></div>
+<script>
+async function loadProducts() {
+  const res = await fetch('/api/products');
+  const products = await res.json();
+  document.getElementById('products').innerHTML = products.map(p => `<p>${p.name}</p>`).join('');
+}
+</script>
+</body>
+</html>
+
